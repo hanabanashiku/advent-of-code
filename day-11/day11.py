@@ -1,4 +1,6 @@
 import re
+from math import floor
+
 
 # As you finally start making your way upriver, you realize your pack is much lighter than you remember. Just then,
 # one of the items from your pack goes flying overhead. Monkeys are playing Keep Away with your missing things!
@@ -16,10 +18,19 @@ import re
 # Figure out which monkeys to chase by counting how many items they inspect over 20 rounds. What is the level of
 # monkey business after 20 rounds of stuff-slinging simian shenanigans?
 
+mod_all = 1
+
 
 def parse_monkeys():
+    global mod_all
     input_file = open('input.txt', 'r').read()
-    return [Monkey(m) for m in input_file.split('\n\n')]
+    monkeys = [Monkey(m) for m in input_file.split('\n\n')]
+
+    if mod_all == 1:
+        for div_by in [m.test["divisible_by"] for m in monkeys]:
+            mod_all *= div_by
+
+    return monkeys
 
 
 class Monkey:
@@ -75,7 +86,7 @@ class Monkey:
         else:
             raise Exception()
 
-        return int(inspected / 3) if not no_relief_mode else inspected
+        return floor(inspected / 3) if not no_relief_mode else inspected % mod_all
 
     def throw_to_monkey(self, item, monkeys):
         # self.items = self.items[1:]
@@ -89,8 +100,6 @@ def calculate_monkey_business(no_relief_mode=False):
     monkeys = parse_monkeys()
 
     for i in range(20 if not no_relief_mode else 10000):
-        if no_relief_mode:
-            print(i)
         for monkey in monkeys:
             monkey.take_round(monkeys, no_relief_mode)
 
@@ -109,5 +118,5 @@ def calculate_monkey_business(no_relief_mode=False):
 #
 # With these new rules, you can still figure out the monkey business after 10000 rounds.
 
-# print(calculate_monkey_business())
+print(calculate_monkey_business())
 print(calculate_monkey_business(True))
