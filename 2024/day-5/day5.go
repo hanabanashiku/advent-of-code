@@ -78,13 +78,6 @@ func checkUpdate(lastMap map[int][][2]int, update []int) bool {
 	return true
 }
 
-func swap(arr []int, i, j int) []int {
-	t := arr[i]
-	arr[i] = arr[j]
-	arr[j] = t
-	return arr
-}
-
 func insert(arr []int, value, i int) []int {
 	if arr[i] == 0 {
 		arr[i] = value
